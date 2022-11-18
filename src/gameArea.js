@@ -16,6 +16,7 @@ function GameArea({cards}) {
             <img src={"/cards/"+cards[0]} key={cards[0]} />{num_card}
         </div>
         <div className={styles.float_right}>this is for GameArea</div>
+        this is real spartaaaa
         </div>
     </div> );
 }

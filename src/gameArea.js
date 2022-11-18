@@ -18,6 +18,7 @@ function GameArea({cards}) {
         <div className={styles.float_right}>this is for GameArea</div>
         this is real spartaaaagameArea
         this is from my development
+        hehehehe
         </div>
     </div> );
 }

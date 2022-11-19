@@ -5,7 +5,7 @@ import './singleton.css'
 function Player1Area
 ({cards}) {
     return ( <div>
-        <p> Player 1 area</p>
+        <h2> Player 1 area</h2>
      <div>{cards.map((curr) => <img key={curr} src={"/cards/"+curr} alt="" />)}</div>
     </div> );
 }

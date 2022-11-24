@@ -10,19 +10,10 @@ import XOXGame from './xoxgame';
 import {useState} from "react"
 import { returnCardPhotoPath, obj_to_file_name } from './cardhelper';
 
-const url = 'http://localhost:8080'
-var stompClient = null;
-var socket = new SockJS('http://127.0.0.1:8080/chat');
-stompClient = Stomp.over(socket);
-stompClient.connect({}, (frame) => {
-  
-  console.log(frame);
-  stompClient.subscribe("/topic/messages", function(frame){
-    console.log("frame has come");
-    console.log(frame);
-  })
-  stompClient.send("/app/chat", {}, "anan");
-})
+var url = 'http://localhost:8080';
+
+fetch(url + '/test/get').then((response) => response.json())
+  .then((data) => console.log(data));
 
 
 //initiate socket connection
@@ -45,47 +36,21 @@ function makeamove(card){
 
 function sendMessage(message){
   
-  const message_url = url+'/test/post';
-  fetch(message_url,{method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*'
-  },
-   body: JSON.stringify({
-    message: message
-   })
-  }
-   ).then(res=> res.json()).then(data => console.log(data))
-  // console.log(message)
-  // stompClient.send("/app/chat", {}, message);
+  
 }
 
 
 function App() {
   //create example cards and place their paths into props
-  console.log('processing app')
-  const [gameReady, setGameReady] = useState(false);
-  var player1cards = [{type:"sinek", description:"1"},{type:"sinek", description:"2"},{type:"sinek", description:"3"}]
-  var player2cards = [{type:"karo", description:"3"},{type:"maca", description:"4"},{type:"karo", description:"5"}]
-  var cardsInTheMiddle = [{type:"kupa", description:"papaz"},{type:"kupa", description:"2"},{type:"kupa", description:"9"}]
   
-  var num_remanining_cards=10;
 
-  var the_game = (<div>
-    <Player1Area cards={player1cards.map((curr)=>obj_to_file_name(curr)+'.png')}/>
-      <GameArea cards={cardsInTheMiddle.map((curr)=>obj_to_file_name(curr)+'.png')} num_remanining_cards={num_remanining_cards}/>
-      <Player2Area cards={player2cards.map((curr)=>obj_to_file_name(curr)+'.png')}/>
-      </div>
-  )
-
-  var gameState = [" " * 9];
+  var gameState = Array(9).fill('x');
   return (
     <div className="App">
       {/* <button onClick={()=>setGameReady(true)}>Game ready!</button> */}
-      <SendMessage sendMessage={sendMessage} />
-      <ConnectGame connect={connectGame}/>
+      
       <XOXGame gameState={gameState} />
-      {gameReady ? the_game : null}
+      
     </div>
   );
 }

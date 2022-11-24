@@ -6,6 +6,7 @@ import GameArea from './gameArea.js'
 import Player1Area from './player1Area.js'
 import Player2Area from './player2Area.js'
 import SendMessage from './sendMessage';
+import XOXGame from './xoxgame';
 import {useState} from "react"
 import { returnCardPhotoPath, obj_to_file_name } from './cardhelper';
 
@@ -14,12 +15,13 @@ var stompClient = null;
 var socket = new SockJS('http://127.0.0.1:8080/chat');
 stompClient = Stomp.over(socket);
 stompClient.connect({}, (frame) => {
-  console.log('ebenin ami');
-  stompClient.subscribe('/topic/messages', function(messageOutput) {
-    console.log(JSON.parse(messageOutput.body));
-});
   
   console.log(frame);
+  stompClient.subscribe("/topic/messages", function(frame){
+    console.log("frame has come");
+    console.log(frame);
+  })
+  stompClient.send("/app/chat", {}, "anan");
 })
 
 
@@ -42,20 +44,20 @@ function makeamove(card){
 }
 
 function sendMessage(message){
-  //fetching testi
-  // const message_url = url+'/game/pingMessage';
-  // fetch(message_url,{method: 'POST',
-  // headers: {
-  //   'Content-Type': 'application/json',
-  //   'Access-Control-Allow-Origin': '*'
-  // },
-  //  body: JSON.stringify({
-  //   username: message
-  //  })
-  // }
-  //  ).then(res=> res.json()).then(data => console.log(data))
-  console.log(message)
-  stompClient.send("/app/chat", {}, "anan zaa");
+  
+  const message_url = url+'/test/post';
+  fetch(message_url,{method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*'
+  },
+   body: JSON.stringify({
+    message: message
+   })
+  }
+   ).then(res=> res.json()).then(data => console.log(data))
+  // console.log(message)
+  // stompClient.send("/app/chat", {}, message);
 }
 
 
@@ -76,12 +78,13 @@ function App() {
       </div>
   )
 
-  
+  var gameState = [" " * 9];
   return (
     <div className="App">
       {/* <button onClick={()=>setGameReady(true)}>Game ready!</button> */}
       <SendMessage sendMessage={sendMessage} />
       <ConnectGame connect={connectGame}/>
+      <XOXGame gameState={gameState} />
       {gameReady ? the_game : null}
     </div>
   );

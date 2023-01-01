@@ -1,55 +1,58 @@
-import './App.css';
-import * as SockJS from 'sockjs-client';
-import * as Stomp from 'stompjs';
-import ConnectGame from './connectGame.js'
-import GameArea from './gameArea.js'
-import Player1Area from './player1Area.js'
-import Player2Area from './player2Area.js'
-import SendMessage from './sendMessage';
-import XOXGame from './xoxgame';
-import {useState} from "react"
-import { returnCardPhotoPath, obj_to_file_name } from './cardhelper';
+import "./App.css";
+import React, { useState, useRef, useCallback } from "react";
+import ConnectGame from "./connectGame.js";
+import GameArea from "./gameArea.js";
+import Player1Area from "./player1Area.js";
+import Player2Area from "./player2Area.js";
+import SendMessage from "./sendMessage";
+import XOXGame from "./xoxgame";
+import StatusBar from "./statusBar";
 
-var url = 'http://localhost:8080';
+import { returnCardPhotoPath, obj_to_file_name } from "./cardhelper";
+import EntryPage from "./components/Entrypage/Entrypage";
+import GamePage from "./components/Game/Gamepage";
 
-fetch(url + '/test/get').then((response) => response.json())
-  .then((data) => console.log(data));
+import {Link, Route, Routes} from "react-router-dom"
+import GameInformation from "./components/Game/GameInformation";
+
 
 
 //initiate socket connection
-function connectGame(username){
-  
-  
-}
-
-
+function connectGame(username) {}
 
 //updates game
-function updateGame(gameStatus){
-  
-}
+function updateGame(gameStatus) {}
 
 //make a move
-function makeamove(card){
+function makeamove(card) {
   
 }
 
-function sendMessage(message){
-  
-  
-}
+function sendMessage(message) {}
+
 
 
 function App() {
-  //create example cards and place their paths into props
+  console.log("creating app");
   
 
-  var gameState = Array(9).fill('x');
+  
+
   return (
     <div className="App">
-      {/* <button onClick={()=>setGameReady(true)}>Game ready!</button> */}
-      
-      <XOXGame gameState={gameState} />
+      <nav>
+        <ul>
+          <li><Link to="/">Home</Link></li>
+          <li><Link to="/game">Game</Link></li>
+          <li><Link to="/game_information/3">Game Information</Link></li>
+        </ul>
+      </nav>
+      <Routes>
+        <Route path="/" element={<EntryPage />} />
+        <Route path="/game" element={<GamePage />} />
+        <Route path="/game_information/:id" element={<GameInformation />} />
+      </Routes>
+     
       
     </div>
   );

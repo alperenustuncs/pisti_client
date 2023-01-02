@@ -14,11 +14,19 @@ function Entrypage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(username),
+      body: JSON.stringify({username: username}),
     });
 
+  
     return request;
   };
+
+  const sendUsernameOnSteroids = (username) => {
+    sendUsername(username)
+          .then((res) => res.json())
+          .then((result) => console.log(result))
+          .catch((err) => console.log(err))
+  }
   return (
     <div>
       <h1>Sudoku</h1>
@@ -27,10 +35,7 @@ function Entrypage() {
         onChange={(i) => handleUsername(i.target.value)}
       />
       <button
-        onClick={sendUsername(username)
-          .then((res) => res.json())
-          .then((result) => console.log(result))
-          .catch((err) => console.log(err))}
+        onClick={sendUsernameOnSteroids(username)}
       >
         Find Game
       </button>

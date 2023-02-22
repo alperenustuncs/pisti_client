@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import StatusBar from "../../statusBar";
 import XOXGame from "../../xoxgame";
 import * as SockJS from "sockjs-client";
@@ -9,11 +10,14 @@ var stompClient = null;
 
 var gameState = Array(9).fill("o");
 //game visuals will be displayed here
+
 function Gamepage() {
     const [isGameStateChanged, setIsGameStateChanged] = useState(false);
     const [gameStatus, setGameStatus] = useState(false);
+    const {gameId} = useParams();
 
     useEffect(() => {
+      console.log(gameId);
         var socket = new SockJS(url + "/chat");
         stompClient = Stomp.over(socket);
         stompClient.connect({}, function (frame) {
@@ -26,6 +30,7 @@ function Gamepage() {
     
             // console.log(JSON.parse(messageOutput.body));
           });
+          stompClient.send("/app/chat", {}, "Hello, server!");
         });
       }, []);
   return (

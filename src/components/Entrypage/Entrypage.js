@@ -1,24 +1,29 @@
 import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { PostWithoutAuth } from "../../services/HttpService";
 
 function Entrypage() {
   const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleUsernameChange = (event) => {
+  const handleUsernameChange = useCallback((event) => {
     setUsername(event.target.value);
-  };
+  }, []);
 
   const handleFindGame = useCallback(() => {
-    console.log("Sending username:", username);
+    setLoading(true);
     PostWithoutAuth("http://localhost:8080/simpleentry/", { username })
       .then((res) => res.json())
       .then((result) => {
         console.log(result);
         localStorage.setItem("currentUserName", result.username);
         localStorage.setItem("currentUser", result.userId);
+        navigate(`/game/${result.gameId}`); // redirect to game page
       })
-      .catch((err) => console.log(err));
-  }, [username]);
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
+  }, [username, navigate]);
 
   return (
     <div>
@@ -28,8 +33,9 @@ function Entrypage() {
         value={username}
         onChange={handleUsernameChange}
       />
-      <button onClick={
-        handleFindGame}>Find Game</button>
+      <button disabled={loading} onClick={handleFindGame}>
+        {loading ? "Loading..." : "Find Game"}
+      </button>
     </div>
   );
 }

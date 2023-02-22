@@ -49,7 +49,7 @@ function App() {
       </nav>
       <Routes>
         <Route path="/" element={<EntryPage />} />
-        <Route path="/game" element={<GamePage />} />
+        <Route path="/game/:gameId" element={<GamePage />} />
         <Route path="/game_information/:id" element={<GameInformation />} />
       </Routes>
      

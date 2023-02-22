@@ -1,44 +1,35 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { PostWithoutAuth } from "../../services/HttpService";
 
 function Entrypage() {
   const [username, setUsername] = useState("");
 
-  const handleUsername = (username) => {
-    setUsername(username);
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
   };
 
-  const sendUsername = (username) => {
-    //http post request the username
-    var request = fetch("http://localhost:8080/simpleentry", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({username: username}),
-    });
+  const handleFindGame = useCallback(() => {
+    console.log("Sending username:", username);
+    PostWithoutAuth("http://localhost:8080/simpleentry/", { username })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result);
+        localStorage.setItem("currentUserName", result.username);
+        localStorage.setItem("currentUser", result.userId);
+      })
+      .catch((err) => console.log(err));
+  }, [username]);
 
-  
-    return request;
-  };
-
-  const sendUsernameOnSteroids = (username) => {
-    sendUsername(username)
-          .then((res) => res.json())
-          .then((result) => console.log(result))
-          .catch((err) => console.log(err))
-  }
   return (
     <div>
       <h1>Sudoku</h1>
       <input
-        placeholder="Ismini gir"
-        onChange={(i) => handleUsername(i.target.value)}
+        placeholder="Enter your username"
+        value={username}
+        onChange={handleUsernameChange}
       />
-      <button
-        onClick={sendUsernameOnSteroids(username)}
-      >
-        Find Game
-      </button>
+      <button onClick={
+        handleFindGame}>Find Game</button>
     </div>
   );
 }

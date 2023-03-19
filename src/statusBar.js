@@ -1,5 +1,5 @@
-function StatusBar({gameState}) {
-    return ( <div>{gameState}</div> );
+function StatusBar({gameFinished}) {
+    return ( <div>{gameFinished ? "Finished" : "Continuning"}</div> );
 }
 
 export default StatusBar;
